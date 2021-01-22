@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { sum, subtract, multiply, divide, clear } from '../redux/actions/index'
-
+import { clear, handleCalculate, SUM, SUBTRACT, MULTIPLY, DIVIDE } from '../redux/actions'
 class Operations extends Component {
   constructor(props){
     super(props);
@@ -9,13 +8,14 @@ class Operations extends Component {
     this.state = {
       value_1: 0,
       value_2: 0,
+      operation: SUM,
     }
   }
 
 
   render() {
-    const { value_1, value_2 } = this.state;
-    const { makeSum, makeSubtract, makeMultiply, makeDivide, letsClear } = this.props;
+    const { value_1, value_2, operation } = this.state;
+    const { letsClear, letsCalculate } = this.props;
     return(
       <div>
         <h2>Operations</h2>
@@ -34,31 +34,29 @@ class Operations extends Component {
           onChange={ (event) => this.setState({ value_2: Number(event.target.value) }) }
         />
         <div>
-          <button
-          onClick={ () => makeSum(value_1, value_2) }
-          >
-            + 
-          </button>
-          <button
-          onClick={ () => makeSubtract(value_1, value_2) }
-          >
-            -
-          </button>
-          <button
-            onClick={ () => makeMultiply(value_1, value_2) }
-          >
-            *
-          </button>
-          <button
-            onClick={ () => makeDivide(value_1, value_2) }
-          >
-            /
-          </button>
-          <button
-            onClick={ () => { this.setState({value_1: 0, value_2: 0}); return letsClear()} }
-          >
-            CLEAR
-          </button>
+        <select
+          name="operations"
+          id="operations"
+          value={operation}
+          onChange={(event) => this.setState({ operation: event.target.value })}
+        >
+          <option value={SUM}>Sum</option>
+          <option value={SUBTRACT}>Subtract</option>
+          <option value={MULTIPLY}>Multiply</option>
+          <option value={DIVIDE}>Divide</option>
+        </select>
+        
+        <button
+          onClick={ () => letsCalculate(value_1, value_2, operation) }
+        >
+          Calcular
+        </button>
+        
+        <button
+          onClick={ () => { this.setState({value_1: 0, value_2: 0}); return letsClear()} }
+        >
+          CLEAR
+        </button>
         </div>
       </div>
     );
@@ -66,10 +64,7 @@ class Operations extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  makeSum: (a, b) => dispatch(sum(a, b)),
-  makeSubtract: (a, b) => dispatch(subtract(a, b)),
-  makeMultiply: (a, b) => dispatch(multiply(a, b)),
-  makeDivide: (a, b) => dispatch(divide(a, b)),
+  letsCalculate: (a, b, op) => dispatch(handleCalculate(a, b, op)),
   letsClear: () => dispatch(clear()),
 });
 

@@ -1,9 +1,11 @@
-import { SUM, SUBTRACT, MULTIPLY, DIVIDE, CLEAR } from '../actions';
+import { CLEAR, SUM, SUBTRACT, MULTIPLY, DIVIDE } from '../actions'
 
 const INITIAL_STATE = {
   history: [],
   result: 0,
 };
+
+
 
 export const operationsReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
